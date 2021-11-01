@@ -153,7 +153,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
         setState(() {});
       } else {
         setState(() {
-          percentage += 0.01;
+          percentage += 0.1;
         });
       }
     }
@@ -163,7 +163,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
         setState(() {});
       } else {
         setState(() {
-          percentage -= 0.01;
+          percentage -= 0.1;
         });
       }
     }*/
@@ -212,7 +212,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                       setState(() {});
                     } else {
                       setState(() {
-                        percentage -= 0.01;
+                        percentage -= 0.1;
                       });
                     }
                   },
