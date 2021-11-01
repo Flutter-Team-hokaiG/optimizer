@@ -1,3 +1,4 @@
+//import 'dart:ffi';
 import 'dart:math'; // 後でインジケータの実装に使う
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -85,7 +86,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.42);
+      final offset0 = Offset(size.width * 0.5, size.height * 0.45);
       // 線の内側部分の座標
       final offset1 = offset0.translate(
         (textCircleRadius + spaceLen) * cos(angle),
@@ -115,8 +116,10 @@ class BatteryLevelIndicator extends StatefulWidget {
 }
 
 class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  double percentage = 0.8;
+  double percentage = 0.9;
   final size = 164.0;
+  bool isEnabled1 = true;
+  bool isEnabled2 = true;
 
   @override
   Widget build(BuildContext context) {
@@ -125,6 +128,46 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
       end: kColorIndicatorEnd,
     ).lerp(percentage)!;
     int intPercentage = (percentage * 100).toInt(); //整数表示するために変数を変えた
+    if (intPercentage >= 100) {
+      setState(() {
+        isEnabled1 = false;
+      });
+    }
+    if (intPercentage < 100) {
+      setState(() {
+        isEnabled1 = true;
+      });
+    }
+    if (intPercentage <= 0) {
+      setState(() {
+        isEnabled2 = false;
+      });
+    }
+    if (intPercentage > 0) {
+      setState(() {
+        isEnabled2 = true;
+      });
+    }
+    sampleFunction1() {
+      if (intPercentage >= 100) {
+        setState(() {});
+      } else {
+        setState(() {
+          percentage += 0.01;
+        });
+      }
+    }
+
+/*    sampleFunction2() {
+      if (intPercentage <= 0) {
+        setState(() {});
+      } else {
+        setState(() {
+          percentage -= 0.01;
+        });
+      }
+    }*/
+
     return CustomPaint(
       painter: _BatteryLevelIndicatorPainter(
         percentage: percentage,
@@ -144,7 +187,8 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                 child: Center(
                   child: Text(
                     '$intPercentage%',
-                    style: TextStyle(color: colorA, fontSize: 48),
+                    style: TextStyle(
+                        color: colorA, fontSize: 30 + percentage * 30),
                   ),
                 ),
               ),
@@ -155,22 +199,22 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
             children: [
               Spacer(flex: 10),
               Center(
-                child: FloatingActionButton(
-                  onPressed: () {
-                    setState(() {
-                      percentage += 0.01;
-                    });
-                  },
+                child: ElevatedButton(
+                  onPressed: isEnabled1 ? () => sampleFunction1() : null,
                   child: Icon(Icons.add),
                 ),
               ),
               Spacer(flex: 1),
               Center(
-                child: FloatingActionButton(
+                child: ElevatedButton(
                   onPressed: () {
-                    setState(() {
-                      percentage -= 0.01;
-                    });
+                    if (intPercentage <= 0) {
+                      setState(() {});
+                    } else {
+                      setState(() {
+                        percentage -= 0.01;
+                      });
+                    }
                   },
                   child: Icon(Icons.remove),
                 ),
