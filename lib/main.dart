@@ -1,4 +1,5 @@
 import 'dart:math'; // 後でインジケータの実装に使う
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 const kColorPurple = Color(0xFF4A148C);
@@ -77,14 +78,14 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final paint = Paint()
         ..color = color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 4;
+        ..strokeWidth = 2;
 
       final spaceLen = 16; // 円とゲージ間の長さ
       final lineLen = 24; // ゲージの長さ
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.5);
+      final offset0 = Offset(size.width * 0.5, size.height * 0.42);
       // 線の内側部分の座標
       final offset1 = offset0.translate(
         (textCircleRadius + spaceLen) * cos(angle),
@@ -114,11 +115,7 @@ class BatteryLevelIndicator extends StatefulWidget {
 }
 
 class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  final double percentage = 0.8;
-  void _incrementCounter() {
-    percentage + 0.01;
-  }
-
+  double percentage = 0.8;
   final size = 164.0;
 
   @override
@@ -127,6 +124,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
       begin: kColorIndicatorBegin,
       end: kColorIndicatorEnd,
     ).lerp(percentage)!;
+    int intPercentage = (percentage * 100).toInt(); //整数表示するために変数を変えた
     return CustomPaint(
       painter: _BatteryLevelIndicatorPainter(
         percentage: percentage,
@@ -145,18 +143,40 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                 height: size,
                 child: Center(
                   child: Text(
-                    '${percentage * 100}%',
+                    '$intPercentage%',
                     style: TextStyle(color: colorA, fontSize: 48),
                   ),
                 ),
               ),
             ),
           ),
-          Center(
-            child: FloatingActionButton(
-              onPressed: _incrementCounter,
-              child: Icon(Icons.add),
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Spacer(flex: 10),
+              Center(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      percentage += 0.01;
+                    });
+                  },
+                  child: Icon(Icons.add),
+                ),
+              ),
+              Spacer(flex: 1),
+              Center(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      percentage -= 0.01;
+                    });
+                  },
+                  child: Icon(Icons.remove),
+                ),
+              ),
+              Spacer(flex: 10),
+            ],
           ),
         ],
       ),
