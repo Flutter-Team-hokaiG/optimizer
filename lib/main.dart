@@ -116,7 +116,7 @@ class BatteryLevelIndicator extends StatefulWidget {
 }
 
 class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  double percentage = 0.9;
+  double percentage = 0.7;
   final size = 164.0;
   bool isEnabled1 = true;
   bool isEnabled2 = true;
