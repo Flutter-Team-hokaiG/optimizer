@@ -79,7 +79,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final paint = Paint()
         ..color = color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2;
+        ..strokeWidth = 5;
 
       final spaceLen = 16; // 円とゲージ間の長さ
       final lineLen = 24; // ゲージの長さ
