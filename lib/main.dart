@@ -82,7 +82,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
         ..strokeWidth = 5;
 
       final spaceLen = 16; // 円とゲージ間の長さ
-      final lineLen = 24; // ゲージの長さ
+      final lineLen = 40; // ゲージの長さ
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
