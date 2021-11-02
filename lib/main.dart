@@ -3,12 +3,9 @@ import 'dart:math'; // 後でインジケータの実装に使う
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-const kColorPurple = Color(0xFF4A148C);
-const kColorPink = Color(0xFFFFF176);
-const kColorIndicatorBegin = kColorPink;
-const kColorIndicatorEnd = kColorPurple;
-const kColorTitle = Color(0xFF616161);
-const kColorText = Color(0xFF9E9E9E);
+const kColorIndicatorBegin = Colors.yellow;
+const kColorIndicatorEnd = Colors.purple;
+const kColorTitle = Colors.black87;
 const kElevation = 4.0;
 
 void main() {
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.light().copyWith(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blue,
         primaryTextTheme: TextTheme(
           headline6: TextStyle(color: kColorTitle),
         ),
@@ -50,7 +47,7 @@ class BatteryOptimizerPage extends StatelessWidget {
           child: Column(
             children: [
               BatteryLevelIndicator(),
-              OptimizeNow(),
+              NextPage(),
             ],
           ),
         ),
@@ -228,21 +225,21 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
   }
 }
 
-class OptimizeNow extends StatelessWidget {
+class NextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.symmetric(vertical: 150),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: kColorPurple,
+          primary: kColorIndicatorEnd,
           padding: EdgeInsets.symmetric(horizontal: 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
         ),
         onPressed: () {},
-        child: Text('Optimize Now', style: TextStyle(color: Colors.white)),
+        child: Text('Next Page', style: TextStyle(color: Colors.white)),
       ),
     );
   }
