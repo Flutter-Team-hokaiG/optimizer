@@ -3,12 +3,9 @@ import 'dart:math'; // 後でインジケータの実装に使う
 import 'dart:ui';
 import 'package:flutter/material.dart';
 
-const kColorPurple = Color(0xFF4A148C);
-const kColorPink = Color(0xFFFFF176);
-const kColorIndicatorBegin = kColorPink;
-const kColorIndicatorEnd = kColorPurple;
-const kColorTitle = Color(0xFF616161);
-const kColorText = Color(0xFF9E9E9E);
+const kColorIndicatorBegin = Colors.yellow;
+const kColorIndicatorEnd = Colors.purple;
+const kColorTitle = Colors.black87;
 const kElevation = 4.0;
 
 void main() {
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData.light().copyWith(
-        primaryColor: Colors.white,
+        primaryColor: Colors.blue,
         primaryTextTheme: TextTheme(
           headline6: TextStyle(color: kColorTitle),
         ),
@@ -41,7 +38,7 @@ class BatteryOptimizerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text('Battery Optimizer'),
+        title: Text('Battery Optimizer 髙桐変更'),
         centerTitle: false,
         elevation: 0,
       ),
@@ -50,7 +47,7 @@ class BatteryOptimizerPage extends StatelessWidget {
           child: Column(
             children: [
               BatteryLevelIndicator(),
-              OptimizeNow(),
+              NextPage(),
             ],
           ),
         ),
@@ -60,7 +57,7 @@ class BatteryOptimizerPage extends StatelessWidget {
 }
 
 class _BatteryLevelIndicatorPainter extends CustomPainter {
-  final double percentage; // バッテリーレベルの割合
+  final int percentage; // バッテリーレベルの割合
   final double textCircleRadius; // 内側に表示される白丸の半径
   _BatteryLevelIndicatorPainter({
     required this.percentage,
@@ -69,7 +66,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    for (int i = 1; i < (360 * percentage); i += 5) {
+    for (int i = 1; i < (360 * percentage / 100); i += 5) {
       final per = i / 360.0;
       // 割合（0~1.0）からグラデーション色に変換
       final color = ColorTween(
@@ -79,10 +76,10 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final paint = Paint()
         ..color = color
         ..style = PaintingStyle.stroke
-        ..strokeWidth = 2;
+        ..strokeWidth = 5;
 
       final spaceLen = 16; // 円とゲージ間の長さ
-      final lineLen = 24; // ゲージの長さ
+      final lineLen = 40; // ゲージの長さ
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
@@ -116,7 +113,7 @@ class BatteryLevelIndicator extends StatefulWidget {
 }
 
 class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  double percentage = 0.7;
+  int percentage = 80;
   final size = 164.0;
   bool isEnabled1 = true;
   bool isEnabled2 = true;
@@ -126,44 +123,43 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
     final colorA = ColorTween(
       begin: kColorIndicatorBegin,
       end: kColorIndicatorEnd,
-    ).lerp(percentage)!;
-    int intPercentage = (percentage * 100).toInt(); //整数表示するために変数を変えた
-    if (intPercentage >= 100) {
+    ).lerp(percentage / 100)!;
+    if (percentage >= 100) {
       setState(() {
         isEnabled1 = false;
       });
     }
-    if (intPercentage < 100) {
+    if (percentage < 100) {
       setState(() {
         isEnabled1 = true;
       });
     }
-    if (intPercentage <= 0) {
+    if (percentage <= 0) {
       setState(() {
         isEnabled2 = false;
       });
     }
-    if (intPercentage > 0) {
+    if (percentage > 0) {
       setState(() {
         isEnabled2 = true;
       });
     }
     sampleFunction1() {
-      if (intPercentage >= 100) {
+      if (percentage >= 100) {
         setState(() {});
       } else {
         setState(() {
-          percentage += 0.1;
+          percentage += 10;
         });
       }
     }
 
 /*    sampleFunction2() {
-      if (intPercentage <= 0) {
+      if (percentage <= 0) {
         setState(() {});
       } else {
         setState(() {
-          percentage -= 0.1;
+          percentage -= 10;
         });
       }
     }*/
@@ -186,9 +182,9 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                 height: size,
                 child: Center(
                   child: Text(
-                    '$intPercentage%',
+                    '$percentage%',
                     style: TextStyle(
-                        color: colorA, fontSize: 30 + percentage * 30),
+                        color: colorA, fontSize: 30 + percentage * 0.3),
                   ),
                 ),
               ),
@@ -208,11 +204,11 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    if (intPercentage <= 0) {
+                    if (percentage <= 0) {
                       setState(() {});
                     } else {
                       setState(() {
-                        percentage -= 0.1;
+                        percentage -= 10;
                       });
                     }
                   },
@@ -228,21 +224,21 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
   }
 }
 
-class OptimizeNow extends StatelessWidget {
+class NextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 24),
+      padding: EdgeInsets.symmetric(vertical: 150),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: kColorPurple,
+          primary: kColorIndicatorEnd,
           padding: EdgeInsets.symmetric(horizontal: 48),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
         ),
         onPressed: () {},
-        child: Text('Optimize Now', style: TextStyle(color: Colors.white)),
+        child: Text('Next Page', style: TextStyle(color: Colors.white)),
       ),
     );
   }
