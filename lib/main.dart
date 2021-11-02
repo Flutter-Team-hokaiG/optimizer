@@ -8,9 +8,7 @@ const kColorIndicatorEnd = Colors.purple;
 const kColorTitle = Colors.black87;
 const kElevation = 4.0;
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
@@ -46,6 +44,7 @@ class BatteryOptimizerPage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
+              Container(height: 50),
               BatteryLevelIndicator(),
               NextPage(),
             ],
@@ -83,7 +82,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.45);
+      final offset0 = Offset(size.width * 0.5, size.height * 0.43);
       // 線の内側部分の座標
       final offset1 = offset0.translate(
         (textCircleRadius + spaceLen) * cos(angle),
@@ -145,9 +144,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
       });
     }
     sampleFunction1() {
-      if (percentage >= 100) {
-        setState(() {});
-      } else {
+      if (percentage < 100) {
         setState(() {
           percentage += 10;
         });
@@ -184,16 +181,17 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                   child: Text(
                     '$percentage%',
                     style: TextStyle(
-                        color: colorA, fontSize: 30 + percentage * 0.3),
+                        color: colorA, fontSize: size * 0.2 + percentage * 0.2),
                   ),
                 ),
               ),
             ),
           ),
+          Container(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(flex: 10),
+              Spacer(flex: 5),
               Center(
                 child: ElevatedButton(
                   onPressed: isEnabled1 ? () => sampleFunction1() : null,
@@ -215,7 +213,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                   child: Icon(Icons.remove),
                 ),
               ),
-              Spacer(flex: 10),
+              Spacer(flex: 5),
             ],
           ),
         ],
@@ -228,7 +226,7 @@ class NextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 150),
+      padding: EdgeInsets.symmetric(vertical: 100),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: kColorIndicatorEnd,
