@@ -9,7 +9,7 @@ class NextPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Next Page takagiri"),
+        title: Text("Next Page takagiri2"),
       ),
     );
   }
