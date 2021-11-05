@@ -2,6 +2,7 @@
 import 'dart:math'; // 後でインジケータの実装に使う
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:optimizer/next_page.dart';
 
 const kColorIndicatorBegin = Colors.yellow;
 const kColorIndicatorEnd = Colors.purple;
@@ -235,7 +236,12 @@ class NextPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NextPage()),
+          );
+        },
         child: Text('Next Page', style: TextStyle(color: Colors.white)),
       ),
     );
