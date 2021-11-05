@@ -47,7 +47,7 @@ class BatteryOptimizerPage extends StatelessWidget {
             children: [
               Container(height: 50),
               BatteryLevelIndicator(),
-              NextPage(),
+              ToNextPage(),
             ],
           ),
         ),
@@ -223,7 +223,7 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
   }
 }
 
-class NextPage extends StatelessWidget {
+class ToNextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
