@@ -36,7 +36,7 @@ class BatteryOptimizerPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        title: Text('Battery Optimizer 髙桐変更'),
+        title: Text('Battery Optimizer'),
         centerTitle: false,
         elevation: 0,
       ),
