@@ -55,7 +55,7 @@ class _BatteryLevelIndicatorPainter extends CustomPainter {
       final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
 
       // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.43);
+      final offset0 = Offset(size.width * 0.5, size.height * 0.38);
       // 線の内側部分の座標
       final offset1 = offset0.translate(
         (textCircleRadius + spaceLen) * cos(angle),
@@ -160,18 +160,19 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
               ),
             ),
           ),
-          Container(height: 20),
-          Row(
+          Container(),
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Spacer(flex: 5),
-              Center(
-                child: ElevatedButton(
-                  onPressed: isEnabled1 ? () => sampleFunction1() : null,
-                  child: Icon(Icons.add),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: isEnabled1 ? () => sampleFunction1() : null,
+                    child: Icon(Icons.add),
+                  ),
                 ),
               ),
-              Spacer(flex: 1),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
@@ -186,7 +187,6 @@ class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
                   child: Icon(Icons.remove),
                 ),
               ),
-              Spacer(flex: 5),
             ],
           ),
         ],
