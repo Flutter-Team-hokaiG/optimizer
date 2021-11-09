@@ -46,26 +46,30 @@ class _Slider1State extends State<Slider1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          height: 300,
-          color: Colors.blue[100],
-          child: SfSlider.vertical(
-            min: -5,
-            max: 5,
-            stepSize: 1,
-            value: _value,
-            interval: 1,
-            showTicks: true,
-            showLabels: true,
-            enableTooltip: true,
-            onChanged: (dynamic value) {
-              setState(() {
-                _value = value;
-              });
-            },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 300,
+            color: Colors.blue[100],
+            child: SfSlider.vertical(
+              min: -5,
+              max: 5,
+              stepSize: 1,
+              value: _value,
+              interval: 1,
+              showTicks: true,
+              showLabels: true,
+              enableTooltip: true,
+              onChanged: (dynamic value) {
+                setState(() {
+                  _value = value;
+                });
+              },
+            ),
           ),
-        ),
+          IconButton(onPressed: () {}, icon: Icon(Icons.volume_up)),
+        ],
       ),
     );
   }
@@ -84,27 +88,30 @@ class _Slider2State extends State<Slider2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawerEdgeDragWidth: 100,
-      body: Center(
-        child: Container(
-          height: 300,
-          color: Colors.red[100],
-          child: SfSlider.vertical(
-            min: -5,
-            max: 5,
-            stepSize: 1,
-            value: _value,
-            interval: 1,
-            showTicks: true,
-            showLabels: true,
-            enableTooltip: true,
-            onChanged: (dynamic value) {
-              setState(() {
-                _value = value;
-              });
-            },
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 300,
+            color: Colors.red[100],
+            child: SfSlider.vertical(
+              min: -5,
+              max: 5,
+              stepSize: 1,
+              value: _value,
+              interval: 1,
+              showTicks: true,
+              showLabels: true,
+              enableTooltip: true,
+              onChanged: (dynamic value) {
+                setState(() {
+                  _value = value;
+                });
+              },
+            ),
           ),
-        ),
+          ElevatedButton(onPressed: () {}, child: Icon(Icons.volume_up)),
+        ],
       ),
     );
   }
