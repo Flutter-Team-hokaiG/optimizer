@@ -1,11 +1,17 @@
-import 'dart:math'; // 後でインジケータの実装に使う
-import 'dart:ui';
+// import 'dart:math'; // 後でインジケータの実装に使う
+// import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:optimizer/main.dart';
+// import 'package:optimizer/main.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class NextPage extends StatelessWidget {
+class NextPage extends StatefulWidget {
   const NextPage({Key? key}) : super(key: key);
 
+  @override
+  State<NextPage> createState() => _NextPageState();
+}
+
+class _NextPageState extends State<NextPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,13 +20,50 @@ class NextPage extends StatelessWidget {
         centerTitle: false,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Container(height: 50),
-              BatteryLevelIndicator(),
-            ],
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(child: Slider1(), width: 200),
+            Container(child: Slider2(), width: 200),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class Slider1 extends StatefulWidget {
+  const Slider1({Key? key}) : super(key: key);
+
+  @override
+  _Slider1State createState() => _Slider1State();
+}
+
+class _Slider1State extends State<Slider1> {
+  int _value = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          height: 300,
+          color: Colors.blue[100],
+          child: SfSlider.vertical(
+            min: -5,
+            max: 5,
+            stepSize: 1,
+            value: _value,
+            interval: 1,
+            showTicks: true,
+            showLabels: true,
+            enableTooltip: true,
+            onChanged: (dynamic value) {
+              setState(() {
+                _value = value;
+              });
+            },
           ),
         ),
       ),
@@ -28,168 +71,40 @@ class NextPage extends StatelessWidget {
   }
 }
 
-class _BatteryLevelIndicatorPainter extends CustomPainter {
-  final int percentage; // バッテリーレベルの割合
-  final double textCircleRadius; // 内側に表示される白丸の半径
-  _BatteryLevelIndicatorPainter({
-    required this.percentage,
-    required this.textCircleRadius,
-  });
+class Slider2 extends StatefulWidget {
+  const Slider2({Key? key}) : super(key: key);
 
   @override
-  void paint(Canvas canvas, Size size) {
-    for (int i = 1; i < (360 * percentage / 100); i += 5) {
-      final per = i / 360.0;
-      // 割合（0~1.0）からグラデーション色に変換
-      final color = ColorTween(
-        begin: kColorIndicatorBegin,
-        end: kColorIndicatorEnd,
-      ).lerp(per)!;
-      final paint = Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 5;
-
-      final spaceLen = 16; // 円とゲージ間の長さ
-      final lineLen = 40; // ゲージの長さ
-      final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
-
-      // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.38);
-      // 線の内側部分の座標
-      final offset1 = offset0.translate(
-        (textCircleRadius + spaceLen) * cos(angle),
-        (textCircleRadius + spaceLen) * sin(angle),
-      );
-      // 線の外側部分の座標
-      final offset2 = offset1.translate(
-        lineLen * cos(angle),
-        lineLen * sin(angle),
-      );
-
-      canvas.drawLine(offset1, offset2, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
+  _Slider2State createState() => _Slider2State();
 }
 
-class BatteryLevelIndicator extends StatefulWidget {
-  BatteryLevelIndicator({Key? key}) : super(key: key);
-
-  @override
-  _BatteryLevelIndicatorState createState() => _BatteryLevelIndicatorState();
-}
-
-class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  int percentage = 80;
-  final size = 164.0;
-  bool isEnabled1 = true;
-  bool isEnabled2 = true;
+class _Slider2State extends State<Slider2> {
+  int _value = 0;
 
   @override
   Widget build(BuildContext context) {
-    final colorA = ColorTween(
-      begin: kColorIndicatorBegin,
-      end: kColorIndicatorEnd,
-    ).lerp(percentage / 100)!;
-    if (percentage >= 100) {
-      setState(() {
-        isEnabled1 = false;
-      });
-    }
-    if (percentage < 100) {
-      setState(() {
-        isEnabled1 = true;
-      });
-    }
-    if (percentage <= 0) {
-      setState(() {
-        isEnabled2 = false;
-      });
-    }
-    if (percentage > 0) {
-      setState(() {
-        isEnabled2 = true;
-      });
-    }
-    sampleFunction1() {
-      if (percentage < 100) {
-        setState(() {
-          percentage += 10;
-        });
-      }
-    }
-
-/*    sampleFunction2() {
-      if (percentage <= 0) {
-        setState(() {});
-      } else {
-        setState(() {
-          percentage -= 10;
-        });
-      }
-    }*/
-
-    return CustomPaint(
-      painter: _BatteryLevelIndicatorPainter(
-        percentage: percentage,
-        textCircleRadius: size * 0.5,
-      ),
-      child: Column(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(64),
-            child: Material(
-              color: Colors.white,
-              elevation: kElevation,
-              borderRadius: BorderRadius.circular(size * 0.5),
-              child: Container(
-                width: size,
-                height: size,
-                child: Center(
-                  child: Text(
-                    '$percentage%',
-                    style: TextStyle(
-                        color: colorA, fontSize: size * 0.2 + percentage * 0.2),
-                  ),
-                ),
-              ),
-            ),
+    return Scaffold(
+      drawerEdgeDragWidth: 100,
+      body: Center(
+        child: Container(
+          height: 300,
+          color: Colors.red[100],
+          child: SfSlider.vertical(
+            min: -5,
+            max: 5,
+            stepSize: 1,
+            value: _value,
+            interval: 1,
+            showTicks: true,
+            showLabels: true,
+            enableTooltip: true,
+            onChanged: (dynamic value) {
+              setState(() {
+                _value = value;
+              });
+            },
           ),
-          Container(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: isEnabled1 ? () => sampleFunction1() : null,
-                    child: Icon(Icons.add),
-                  ),
-                ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (percentage <= 0) {
-                      setState(() {});
-                    } else {
-                      setState(() {
-                        percentage -= 10;
-                      });
-                    }
-                  },
-                  child: Icon(Icons.remove),
-                ),
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
