@@ -1,5 +1,6 @@
 // import 'dart:math'; // 後でインジケータの実装に使う
 // import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:optimizer/main.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -59,8 +60,13 @@ class _Slider1State extends State<Slider1> {
               value: _value,
               interval: 1,
               showTicks: true,
-              showLabels: true,
+              // showLabels: true,
               enableTooltip: true,
+              tooltipPosition: SliderTooltipPosition.right,
+              activeColor: Colors.green,
+              inactiveColor: Colors.yellow,
+              showDividers: true,
+              thumbIcon: Icon(Icons.music_note, size: 20, color: Colors.white),
               onChanged: (dynamic value) {
                 setState(() {
                   if (check == 0) {
@@ -110,6 +116,14 @@ class _Slider2State extends State<Slider2> {
               showTicks: true,
               showLabels: true,
               enableTooltip: true,
+              thumbIcon: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    _value.toInt().toString(),
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  )),
+              trackShape: _TrackShape(),
               onChanged: (dynamic value) {
                 setState(() {
                   _value = value;
@@ -121,5 +135,30 @@ class _Slider2State extends State<Slider2> {
         ],
       ),
     );
+  }
+}
+
+class _TrackShape extends SfTrackShape {
+  void paint(PaintingContext context, Offset offset, Offset? thumbCenter,
+      Offset? startThumbCenter, Offset? endThumbCenter,
+      {required RenderBox parentBox,
+      required themeData,
+      SfRangeValues? currentValues,
+      dynamic currentValue,
+      required Animation<double> enableAnimation,
+      required Paint? inactivePaint,
+      required Paint? activePaint,
+      required TextDirection textDirection}) {
+    Paint paint = Paint()
+      ..color = themeData.activeTrackColor!
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    super.paint(context, offset, thumbCenter, startThumbCenter, endThumbCenter,
+        parentBox: parentBox,
+        themeData: themeData,
+        enableAnimation: enableAnimation,
+        inactivePaint: inactivePaint,
+        activePaint: paint,
+        textDirection: textDirection);
   }
 }
