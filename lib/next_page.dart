@@ -97,11 +97,15 @@ class Slider2 extends StatefulWidget {
 
 class _Slider2State extends State<Slider2> {
   int _value = 0;
-
+  bool _enableDragging = true;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SliderTheme(
+      data: SliderThemeData(
+        activeTickMarkColor: Colors.amber,
+        disabledActiveTickMarkColor: Colors.amberAccent,
+      ),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
@@ -113,9 +117,9 @@ class _Slider2State extends State<Slider2> {
               stepSize: 1,
               value: _value,
               interval: 1,
-              showTicks: true,
-              showLabels: true,
-              enableTooltip: true,
+              showTicks: _enableDragging,
+              showLabels: _enableDragging,
+              enableTooltip: _enableDragging,
               thumbIcon: Container(
                   alignment: Alignment.center,
                   child: Text(
@@ -132,6 +136,17 @@ class _Slider2State extends State<Slider2> {
             ),
           ),
           ElevatedButton(onPressed: () {}, child: Icon(Icons.volume_up)),
+          Transform.scale(
+              scale: 1.5,
+              child: Switch(
+                value: _enableDragging,
+                onChanged: (bool value) {
+                  setState(() {
+                    _enableDragging = value;
+                    //stateSetter(() {});
+                  });
+                },
+              )),
         ],
       ),
     );
