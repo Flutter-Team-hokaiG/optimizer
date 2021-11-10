@@ -1,13 +1,9 @@
-// import 'dart:math'; // 後でインジケータの実装に使う
-// import 'dart:ui';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:optimizer/main.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class NextPage extends StatefulWidget {
   const NextPage({Key? key}) : super(key: key);
-
   @override
   State<NextPage> createState() => _NextPageState();
 }
@@ -36,18 +32,30 @@ class _NextPageState extends State<NextPage> {
 
 class Slider1 extends StatefulWidget {
   const Slider1({Key? key}) : super(key: key);
-
   @override
   _Slider1State createState() => _Slider1State();
 }
 
 class _Slider1State extends State<Slider1> {
-  int? _value = 0;
-  double check = 0;
+  int _value = 0;
+  int _valueTTT = 0;
+  bool _enableDragging = true;
+  void _onChanged(dynamic value) {
+    if (_enableDragging == true) {
+      setState(() => _value = value);
+    } else {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SliderTheme(
+      data: SliderThemeData(
+        activeTickMarkColor: Colors.amber,
+        disabledActiveTickMarkColor: Colors.amberAccent,
+      ),
+      child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
@@ -59,29 +67,35 @@ class _Slider1State extends State<Slider1> {
               stepSize: 1,
               value: _value,
               interval: 1,
-              showTicks: true,
-              // showLabels: true,
-              enableTooltip: true,
+              showTicks: _enableDragging,
+              showLabels: _enableDragging,
+              enableTooltip: _enableDragging,
               tooltipPosition: SliderTooltipPosition.right,
               activeColor: Colors.green,
               inactiveColor: Colors.yellow,
               showDividers: true,
               thumbIcon: Icon(Icons.music_note, size: 20, color: Colors.white),
-              onChanged: (dynamic value) {
-                setState(() {
-                  if (check == 0) {
-                    _value = value;
-                  } else
-                    _value = null;
-                });
-              },
+              onChanged: _onChanged,
             ),
           ),
-          IconButton(
-              onPressed: () {
-                check = 1;
-              },
-              icon: Icon(Icons.volume_up)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.volume_up)),
+          Transform.scale(
+              scale: 1.5,
+              child: Switch(
+                value: _enableDragging,
+                onChanged: (bool value) {
+                  setState(() {
+                    _enableDragging = value;
+                    if (_enableDragging == true) {
+                      _onChanged(_valueTTT);
+                    } else {
+                      _valueTTT = _value;
+                      _onChanged(_value);
+                    }
+                    //stateSetter(() {});
+                  });
+                },
+              )),
         ],
       ),
     );
@@ -90,7 +104,6 @@ class _Slider1State extends State<Slider1> {
 
 class Slider2 extends StatefulWidget {
   const Slider2({Key? key}) : super(key: key);
-
   @override
   _Slider2State createState() => _Slider2State();
 }
@@ -102,7 +115,9 @@ class _Slider2State extends State<Slider2> {
   void _onChanged(dynamic value) {
     if (_enableDragging == true) {
       setState(() => _value = value);
-    } else {}
+    } else {
+      return null;
+    }
   }
 
   @override
