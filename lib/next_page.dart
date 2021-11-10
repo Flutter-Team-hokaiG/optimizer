@@ -98,6 +98,10 @@ class Slider2 extends StatefulWidget {
 class _Slider2State extends State<Slider2> {
   int _value = 0;
   bool _enableDragging = true;
+  void _onChanged(dynamic value) {
+    setState(() => _value = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return SliderTheme(
@@ -120,6 +124,7 @@ class _Slider2State extends State<Slider2> {
               showTicks: _enableDragging,
               showLabels: _enableDragging,
               enableTooltip: _enableDragging,
+              showDividers: true,
               thumbIcon: Container(
                   alignment: Alignment.center,
                   child: Text(
@@ -128,11 +133,7 @@ class _Slider2State extends State<Slider2> {
                     textAlign: TextAlign.center,
                   )),
               trackShape: _TrackShape(),
-              onChanged: (dynamic value) {
-                setState(() {
-                  _value = value;
-                });
-              },
+              onChanged: _onChanged,
             ),
           ),
           ElevatedButton(onPressed: () {}, child: Icon(Icons.volume_up)),
@@ -143,6 +144,11 @@ class _Slider2State extends State<Slider2> {
                 onChanged: (bool value) {
                   setState(() {
                     _enableDragging = value;
+                    if (_enableDragging == true) {
+                      _onChanged(2);
+                    } else {
+                      _onChanged(0);
+                    }
                     //stateSetter(() {});
                   });
                 },
