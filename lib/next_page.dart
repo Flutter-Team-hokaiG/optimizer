@@ -41,8 +41,8 @@ class Slider1 extends StatefulWidget {
 }
 
 class _Slider1State extends State<Slider1> {
-  int _value = 0;
-
+  int? _value = 0;
+  double check = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,12 +63,19 @@ class _Slider1State extends State<Slider1> {
               enableTooltip: true,
               onChanged: (dynamic value) {
                 setState(() {
-                  _value = value;
+                  if (check == 0) {
+                    _value = value;
+                  } else
+                    _value = null;
                 });
               },
             ),
           ),
-          IconButton(onPressed: () {}, icon: Icon(Icons.volume_up)),
+          IconButton(
+              onPressed: () {
+                check = 1;
+              },
+              icon: Icon(Icons.volume_up)),
         ],
       ),
     );
