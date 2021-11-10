@@ -97,9 +97,12 @@ class Slider2 extends StatefulWidget {
 
 class _Slider2State extends State<Slider2> {
   int _value = 0;
+  int _valueTTT = 0;
   bool _enableDragging = true;
   void _onChanged(dynamic value) {
-    setState(() => _value = value);
+    if (_enableDragging == true) {
+      setState(() => _value = value);
+    } else {}
   }
 
   @override
@@ -145,9 +148,10 @@ class _Slider2State extends State<Slider2> {
                   setState(() {
                     _enableDragging = value;
                     if (_enableDragging == true) {
-                      _onChanged(2);
+                      _onChanged(_valueTTT);
                     } else {
-                      _onChanged(0);
+                      _valueTTT = _value;
+                      _onChanged(_value);
                     }
                     //stateSetter(() {});
                   });
