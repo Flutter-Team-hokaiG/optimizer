@@ -1,11 +1,14 @@
-import 'dart:math'; // 後でインジケータの実装に使う
-import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:optimizer/main.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class NextPage extends StatelessWidget {
+class NextPage extends StatefulWidget {
   const NextPage({Key? key}) : super(key: key);
+  @override
+  State<NextPage> createState() => _NextPageState();
+}
 
+class _NextPageState extends State<NextPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,183 +17,188 @@ class NextPage extends StatelessWidget {
         centerTitle: false,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              Container(height: 50),
-              BatteryLevelIndicator(),
-            ],
-          ),
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Container(child: Slider1(), width: 200),
+            Container(child: Slider2(), width: 200),
+          ],
         ),
       ),
     );
   }
 }
 
-class _BatteryLevelIndicatorPainter extends CustomPainter {
-  final int percentage; // バッテリーレベルの割合
-  final double textCircleRadius; // 内側に表示される白丸の半径
-  _BatteryLevelIndicatorPainter({
-    required this.percentage,
-    required this.textCircleRadius,
-  });
-
+class Slider1 extends StatefulWidget {
+  const Slider1({Key? key}) : super(key: key);
   @override
-  void paint(Canvas canvas, Size size) {
-    for (int i = 1; i < (360 * percentage / 100); i += 5) {
-      final per = i / 360.0;
-      // 割合（0~1.0）からグラデーション色に変換
-      final color = ColorTween(
-        begin: kColorIndicatorBegin,
-        end: kColorIndicatorEnd,
-      ).lerp(per)!;
-      final paint = Paint()
-        ..color = color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 5;
+  _Slider1State createState() => _Slider1State();
+}
 
-      final spaceLen = 16; // 円とゲージ間の長さ
-      final lineLen = 40; // ゲージの長さ
-      final angle = (2 * pi * per) - (pi / 2); // 0時方向から開始するため-90度ずらす
-
-      // 円の中心座標
-      final offset0 = Offset(size.width * 0.5, size.height * 0.38);
-      // 線の内側部分の座標
-      final offset1 = offset0.translate(
-        (textCircleRadius + spaceLen) * cos(angle),
-        (textCircleRadius + spaceLen) * sin(angle),
-      );
-      // 線の外側部分の座標
-      final offset2 = offset1.translate(
-        lineLen * cos(angle),
-        lineLen * sin(angle),
-      );
-
-      canvas.drawLine(offset1, offset2, paint);
+class _Slider1State extends State<Slider1> {
+  int _value = 0;
+  int _valueTTT = 0;
+  bool _enableDragging = true;
+  void _onChanged(dynamic value) {
+    if (_enableDragging == true) {
+      setState(() => _value = value);
+    } else {
+      return null;
     }
   }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-class BatteryLevelIndicator extends StatefulWidget {
-  BatteryLevelIndicator({Key? key}) : super(key: key);
-
-  @override
-  _BatteryLevelIndicatorState createState() => _BatteryLevelIndicatorState();
-}
-
-class _BatteryLevelIndicatorState extends State<BatteryLevelIndicator> {
-  int percentage = 80;
-  final size = 164.0;
-  bool isEnabled1 = true;
-  bool isEnabled2 = true;
 
   @override
   Widget build(BuildContext context) {
-    final colorA = ColorTween(
-      begin: kColorIndicatorBegin,
-      end: kColorIndicatorEnd,
-    ).lerp(percentage / 100)!;
-    if (percentage >= 100) {
-      setState(() {
-        isEnabled1 = false;
-      });
-    }
-    if (percentage < 100) {
-      setState(() {
-        isEnabled1 = true;
-      });
-    }
-    if (percentage <= 0) {
-      setState(() {
-        isEnabled2 = false;
-      });
-    }
-    if (percentage > 0) {
-      setState(() {
-        isEnabled2 = true;
-      });
-    }
-    sampleFunction1() {
-      if (percentage < 100) {
-        setState(() {
-          percentage += 10;
-        });
-      }
-    }
-
-/*    sampleFunction2() {
-      if (percentage <= 0) {
-        setState(() {});
-      } else {
-        setState(() {
-          percentage -= 10;
-        });
-      }
-    }*/
-
-    return CustomPaint(
-      painter: _BatteryLevelIndicatorPainter(
-        percentage: percentage,
-        textCircleRadius: size * 0.5,
+    return SliderTheme(
+      data: SliderThemeData(
+        activeTickMarkColor: Colors.amber,
+        disabledActiveTickMarkColor: Colors.amberAccent,
       ),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Container(
-            padding: const EdgeInsets.all(64),
-            child: Material(
-              color: Colors.white,
-              elevation: kElevation,
-              borderRadius: BorderRadius.circular(size * 0.5),
-              child: Container(
-                width: size,
-                height: size,
-                child: Center(
-                  child: Text(
-                    '$percentage%',
-                    style: TextStyle(
-                        color: colorA, fontSize: size * 0.2 + percentage * 0.2),
-                  ),
-                ),
-              ),
+            height: 300,
+            color: Colors.blue[100],
+            child: SfSlider.vertical(
+              min: -5,
+              max: 5,
+              stepSize: 1,
+              value: _value,
+              interval: 1,
+              showTicks: _enableDragging,
+              showLabels: _enableDragging,
+              enableTooltip: _enableDragging,
+              tooltipPosition: SliderTooltipPosition.right,
+              activeColor: Colors.green,
+              inactiveColor: Colors.yellow,
+              showDividers: true,
+              thumbIcon: Icon(Icons.music_note, size: 20, color: Colors.white),
+              onChanged: _onChanged,
             ),
           ),
-          Container(),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Center(
-                  child: ElevatedButton(
-                    onPressed: isEnabled1 ? () => sampleFunction1() : null,
-                    child: Icon(Icons.add),
-                  ),
-                ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (percentage <= 0) {
-                      setState(() {});
+          IconButton(onPressed: () {}, icon: Icon(Icons.volume_up)),
+          Transform.scale(
+              scale: 1.5,
+              child: Switch(
+                value: _enableDragging,
+                onChanged: (bool value) {
+                  setState(() {
+                    _enableDragging = value;
+                    if (_enableDragging == true) {
+                      _onChanged(_valueTTT);
                     } else {
-                      setState(() {
-                        percentage -= 10;
-                      });
+                      _valueTTT = _value;
+                      _onChanged(_value);
                     }
-                  },
-                  child: Icon(Icons.remove),
-                ),
-              ),
-            ],
-          ),
+                    //stateSetter(() {});
+                  });
+                },
+              )),
         ],
       ),
     );
+  }
+}
+
+class Slider2 extends StatefulWidget {
+  const Slider2({Key? key}) : super(key: key);
+  @override
+  _Slider2State createState() => _Slider2State();
+}
+
+class _Slider2State extends State<Slider2> {
+  int _value = 0;
+  int _valueTTT = 0;
+  bool _enableDragging = true;
+  void _onChanged(dynamic value) {
+    if (_enableDragging == true) {
+      setState(() => _value = value);
+    } else {
+      return null;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SliderTheme(
+      data: SliderThemeData(
+        activeTickMarkColor: Colors.amber,
+        disabledActiveTickMarkColor: Colors.amberAccent,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            height: 300,
+            color: Colors.red[100],
+            child: SfSlider.vertical(
+              min: -5,
+              max: 5,
+              stepSize: 1,
+              value: _value,
+              interval: 1,
+              showTicks: _enableDragging,
+              showLabels: _enableDragging,
+              enableTooltip: _enableDragging,
+              showDividers: true,
+              thumbIcon: Container(
+                  alignment: Alignment.center,
+                  child: Text(
+                    _value.toInt().toString(),
+                    style: const TextStyle(color: Colors.white),
+                    textAlign: TextAlign.center,
+                  )),
+              trackShape: _TrackShape(),
+              onChanged: _onChanged,
+            ),
+          ),
+          ElevatedButton(onPressed: () {}, child: Icon(Icons.volume_up)),
+          Transform.scale(
+              scale: 1.5,
+              child: Switch(
+                value: _enableDragging,
+                onChanged: (bool value) {
+                  setState(() {
+                    _enableDragging = value;
+                    if (_enableDragging == true) {
+                      _onChanged(_valueTTT);
+                    } else {
+                      _valueTTT = _value;
+                      _onChanged(_value);
+                    }
+                    //stateSetter(() {});
+                  });
+                },
+              )),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrackShape extends SfTrackShape {
+  void paint(PaintingContext context, Offset offset, Offset? thumbCenter,
+      Offset? startThumbCenter, Offset? endThumbCenter,
+      {required RenderBox parentBox,
+      required themeData,
+      SfRangeValues? currentValues,
+      dynamic currentValue,
+      required Animation<double> enableAnimation,
+      required Paint? inactivePaint,
+      required Paint? activePaint,
+      required TextDirection textDirection}) {
+    Paint paint = Paint()
+      ..color = themeData.activeTrackColor!
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    super.paint(context, offset, thumbCenter, startThumbCenter, endThumbCenter,
+        parentBox: parentBox,
+        themeData: themeData,
+        enableAnimation: enableAnimation,
+        inactivePaint: inactivePaint,
+        activePaint: paint,
+        textDirection: textDirection);
   }
 }
