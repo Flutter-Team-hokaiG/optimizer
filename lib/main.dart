@@ -3,6 +3,7 @@ import 'dart:math'; // 後でインジケータの実装に使う
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:optimizer/next_page.dart';
+import 'package:optimizer/takagiri_page.dart';
 
 const kColorIndicatorBegin = Colors.yellow;
 const kColorIndicatorEnd = Colors.purple;
@@ -48,6 +49,7 @@ class BatteryOptimizerPage extends StatelessWidget {
               Container(height: 50),
               BatteryLevelIndicator(),
               ToNextPage(),
+              ToTakagiriPage(),
             ],
           ),
         ),
@@ -243,6 +245,31 @@ class ToNextPage extends StatelessWidget {
           );
         },
         child: Text('Next Page', style: TextStyle(color: Colors.white)),
+      ),
+    );
+  }
+}
+
+class ToTakagiriPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 100),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: kColorIndicatorEnd,
+          padding: EdgeInsets.symmetric(horizontal: 48),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TakagiriPage()),
+          );
+        },
+        child: Text('髙桐の部屋', style: TextStyle(color: Colors.white)),
       ),
     );
   }
