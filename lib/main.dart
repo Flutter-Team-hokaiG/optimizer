@@ -229,7 +229,7 @@ class ToNextPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 100),
+      padding: EdgeInsets.symmetric(vertical: 60),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: kColorIndicatorEnd,
@@ -254,7 +254,7 @@ class ToTakagiriPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 100),
+      padding: EdgeInsets.symmetric(vertical: 20),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           primary: kColorIndicatorEnd,
