@@ -110,15 +110,7 @@ class Slider2 extends StatefulWidget {
 
 class _Slider2State extends State<Slider2> {
   int _value = 0;
-  int _valueTTT = 0;
   bool _enableDragging = true;
-  void _onChanged(dynamic value) {
-    if (_enableDragging == true) {
-      setState(() => _value = value);
-    } else {
-      return null;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,45 +125,65 @@ class _Slider2State extends State<Slider2> {
           Container(
             height: 300,
             color: Colors.red[100],
-            child: SfSlider.vertical(
-              min: -5,
-              max: 5,
-              stepSize: 1,
-              value: _value,
-              interval: 1,
-              showTicks: _enableDragging,
-              showLabels: _enableDragging,
-              enableTooltip: _enableDragging,
-              showDividers: true,
-              thumbIcon: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                    _value.toInt().toString(),
-                    style: const TextStyle(color: Colors.white),
-                    textAlign: TextAlign.center,
-                  )),
-              trackShape: _TrackShape(),
-              onChanged: _onChanged,
-            ),
+            child: (() {
+              //即時関数を導入
+              if (_enableDragging == true) {
+                return SfSlider.vertical(
+                  min: -5,
+                  max: 5,
+                  stepSize: 1,
+                  value: _value,
+                  interval: 1,
+                  showTicks: _enableDragging,
+                  showLabels: _enableDragging,
+                  enableTooltip: _enableDragging,
+                  showDividers: true,
+                  thumbIcon: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        _value.toInt().toString(),
+                        style: const TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      )),
+                  trackShape: _TrackShape(),
+                  onChanged: (dynamic value) {
+                    setState(() => _value = value);
+                  },
+                );
+              } else {
+                return SfSlider.vertical(
+                  min: -5,
+                  max: 5,
+                  stepSize: 1,
+                  value: _value,
+                  interval: 1,
+                  thumbIcon: Container(
+                      alignment: Alignment.center,
+                      child: Text(
+                        _value.toInt().toString(),
+                        style: const TextStyle(color: Colors.white),
+                        textAlign: TextAlign.center,
+                      )),
+                  onChanged: null,
+                );
+              }
+            })(),
           ),
           ElevatedButton(onPressed: () {}, child: Icon(Icons.volume_up)),
           Transform.scale(
-              scale: 1.5,
-              child: Switch(
-                value: _enableDragging,
-                onChanged: (bool value) {
-                  setState(() {
-                    _enableDragging = value;
-                    if (_enableDragging == true) {
-                      _onChanged(_valueTTT);
-                    } else {
-                      _valueTTT = _value;
-                      _onChanged(_value);
-                    }
-                    //stateSetter(() {});
-                  });
-                },
-              )),
+            scale: 1.5,
+            child: Switch(
+              value: _enableDragging,
+              onChanged: (bool value) {
+                setState(() {
+                  _enableDragging = value;
+                  if (_enableDragging == true) {
+                  } else {}
+                  // stateSetter(() {});
+                });
+              },
+            ),
+          ),
         ],
       ),
     );
